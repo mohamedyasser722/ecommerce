@@ -1,0 +1,25 @@
+.brandLogo {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.socialIcon {
+  font-size: 1.2rem;
+  margin: 0 0.5rem;
+}
+
+.facebookIcon {
+  color: #3b5998;
+}
+
+.instagramIcon {
+  color: #e1306c;
+}
+
+.tiktokIcon {
+  color: #000000;
+}
+
+.socialIconsContainer {
+  margin-right: 1rem;
+}

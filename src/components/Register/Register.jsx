@@ -94,14 +94,9 @@ function Register() {
       });
       
       // Handle successful response
-      if (response.data.message === 'success') {
-        // Store token in localStorage
-        localStorage.setItem('userToken', response.data.token);
-        
-        console.log('User registered successfully with Google:', response.data.user);
-        
+      if (response.data.message === 'success') {        
         // Redirect to login page after successful registration
-        navigate('/login');
+        navigate('/');
       }
     } catch (error) {
       console.error('Registration error:', error);

@@ -6,11 +6,15 @@ import Login from './components/Login/Login.jsx'
 import Register from './components/Register/Register.jsx'
 import Categories from './components/Categories/Categories.jsx'
 import Products from './components/Products/Products.jsx'
+import ProductDetails from './components/ProductDetails/ProductDetails.jsx'
 import Cart from './components/Cart/Cart.jsx'
 import Brands from './components/Brands/Brands.jsx'
 import NotFound from './components/NotFound/NotFound.jsx'
-
-
+import CounterContextProvider from './components/Context/CounterContext.js'
+import UserContextProvider from './components/Context/UserContext.js'
+import { useContext, useEffect } from 'react';
+import { UserContext } from './components/Context/UserContext.js';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 
 let router = createBrowserRouter([
   {
@@ -19,7 +23,7 @@ let router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />
+        element: <ProtectedRoute><Home /></ProtectedRoute>
       },
       {
         path: "login",
@@ -31,33 +35,37 @@ let router = createBrowserRouter([
       },
       {
         path: "products",
-        element: <Products />
+        element: <ProtectedRoute><Products /></ProtectedRoute>
+      },
+      {
+        path: "product/:id",
+        element: <ProtectedRoute><ProductDetails /></ProtectedRoute>
       },
       {
         path: "categories",
-        element: <Categories />
+        element: <ProtectedRoute><Categories /></ProtectedRoute>
       },
       {
         path: "cart",
-        element: <Cart />
+        element: <ProtectedRoute><Cart /></ProtectedRoute>
       },
       {
         path: "brands",
-        element: <Brands />
+        element: <ProtectedRoute><Brands /></ProtectedRoute>
       },
       {
         path:"*",
         element: <NotFound />
       }
-      
     ]
   }
 ])
 
 function App() {
-
     return (
-      <RouterProvider router={router} />
+      <CounterContextProvider>
+          <RouterProvider router={router} />
+      </CounterContextProvider>
     )
 }
 

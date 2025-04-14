@@ -1,25 +1,46 @@
 .brandLogo {
-  color: #2ecc71;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+}
+
+.socialIconsContainer {
+  display: flex;
+  gap: 1rem;
+  margin-right: 1rem;
 }
 
 .socialIcon {
   font-size: 1.2rem;
-  margin: 0 0.5rem;
+  transition: color 0.2s;
 }
 
 .facebookIcon {
-  color: #3b5998;
+  color: #1877f2;
 }
 
 .instagramIcon {
-  color: #e1306c;
+  color: #e4405f;
 }
 
 .tiktokIcon {
   color: #000000;
 }
 
-.socialIconsContainer {
-  margin-right: 1rem;
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  min-width: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

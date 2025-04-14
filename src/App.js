@@ -1,5 +1,5 @@
 import './App.css';
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './components/Home/Home.jsx'
 import Layout from './components/Layout/Layout.jsx'
 import Login from './components/Login/Login.jsx'
@@ -10,11 +10,11 @@ import ProductDetails from './components/ProductDetails/ProductDetails.jsx'
 import Cart from './components/Cart/Cart.jsx'
 import Brands from './components/Brands/Brands.jsx'
 import NotFound from './components/NotFound/NotFound.jsx'
-import CounterContextProvider from './components/Context/CounterContext.js'
 import UserContextProvider from './components/Context/UserContext.js'
-import { useContext, useEffect } from 'react';
-import { UserContext } from './components/Context/UserContext.js';
+import CartContextProvider from './components/Context/CartContext.js'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 let router = createBrowserRouter([
   {
@@ -62,11 +62,14 @@ let router = createBrowserRouter([
 ])
 
 function App() {
-    return (
-      <CounterContextProvider>
-          <RouterProvider router={router} />
-      </CounterContextProvider>
-    )
+  return (
+    <UserContextProvider>
+      <CartContextProvider>
+        <RouterProvider router={router} />
+        <ToastContainer position="bottom-right" />
+      </CartContextProvider>
+    </UserContextProvider>
+  )
 }
 
 export default App;

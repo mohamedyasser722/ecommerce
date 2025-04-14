@@ -4,11 +4,14 @@ import styles from './Products.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
+import { useCart } from '../Context/CartContext';
+import { toast } from 'react-toastify';
 
 function Products() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const { addToCart } = useCart();
   const ITEMS_PER_PAGE = 8;
 
   const fetchProducts = async () => {
@@ -40,6 +43,7 @@ function Products() {
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  
   const paginatedProducts = useMemo(() => {
     const start = (page - 1) * ITEMS_PER_PAGE;
     return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
@@ -54,14 +58,40 @@ function Products() {
     navigate(`/product/${productId}`);
   };
 
+  const handleAddToCart = async (e, productId) => {
+    e.stopPropagation();
+    try {
+      const button = e.currentTarget;
+      if (!button) return;
+
+      button.disabled = true;
+      button.innerHTML = '<i class="fas fa-check"></i> Added';
+      button.classList.add(styles.added);
+
+      await addToCart(productId);
+      
+      setTimeout(() => {
+        if (button) {
+          button.disabled = false;
+          button.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+          button.classList.remove(styles.added);
+        }
+      }, 2000);
+    } catch (err) {
+      const button = e.currentTarget;
+      if (button) {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+        button.classList.remove(styles.added);
+      }
+      toast.error(err.message || 'Failed to add product to cart');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
-        <ClipLoader
-          color="#3498db"
-          size={50}
-          aria-label="Loading Products"
-        />
+        <ClipLoader color="#3498db" size={50} />
         <p className={styles.loadingText}>Loading Products...</p>
       </div>
     );
@@ -111,13 +141,30 @@ function Products() {
                 }
               }}
             >
-              <img src={product.imageCover} alt={product.title} className={styles.productImage} />
-              <h3 className={styles.productTitle}>{product.title}</h3>
-              <p className={styles.productPrice}>Price: ${product.price}</p>
-              <p className={styles.productRating}>
-                <i className="fas fa-star" style={{ color: '#f1c40f' }}></i>
-                {product.ratingsAverage} ({product.ratingsQuantity} reviews)
-              </p>
+              <div className={styles.productImageContainer}>
+                <img src={product.imageCover} alt={product.title} className={styles.productImage} />
+              </div>
+              <div className={styles.productInfo}>
+                <h3 className={styles.productTitle}>{product.title}</h3>
+                <p className={styles.productPrice}>
+                  ${product.priceAfterDiscount || product.price}
+                  {product.priceAfterDiscount && (
+                    <span className={styles.originalPrice}>${product.price}</span>
+                  )}
+                </p>
+                <p className={styles.productRating}>
+                  <i className="fas fa-star" style={{ color: '#f1c40f' }}></i>
+                  {product.ratingsAverage} ({product.ratingsQuantity} reviews)
+                </p>
+                <button
+                  className={styles.addToCartButton}
+                  onClick={(e) => handleAddToCart(e, product._id)}
+                  data-product-id={product._id}
+                >
+                  <i className="fas fa-shopping-cart"></i>
+                  Add to Cart
+                </button>
+              </div>
             </div>
           ))}
         </div>

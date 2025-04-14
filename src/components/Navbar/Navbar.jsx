@@ -3,11 +3,12 @@ import styles from './Navbar.module.css';
 import logo from '../../Assets/images/freshcart-logo.svg';
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
-
+import { useCart } from '../Context/CartContext';
 
 export default function Navbar()   
 {
     const {userToken, setUserToken} = useContext(UserContext);
+    const { cart } = useCart();
     const navigate = useNavigate();
     function logOut()
     {
@@ -29,7 +30,14 @@ export default function Navbar()
             <Link className="nav-link" to="">Home</Link>
           </li>
           <li className="nav-item mx-2">
-            <Link className="nav-link" to="/cart">Cart</Link>
+            <Link className="nav-link position-relative" to="/cart">
+              Cart
+              {cart && cart.numOfCartItems > 0 && (
+                <span className={styles.cartBadge}>
+                  {cart.numOfCartItems}
+                </span>
+              )}
+            </Link>
           </li>
           <li className="nav-item mx-2">
             <Link className="nav-link" to="/Products">Products</Link>
